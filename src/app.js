@@ -1,8 +1,9 @@
 // 3rd Party Modules
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const sequelize = require("./utils/database.js");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv/config");
 
 // Local Modules
@@ -14,6 +15,7 @@ const PORT = env.PORT;
 app = express();
 
 // Middlewares
+app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
