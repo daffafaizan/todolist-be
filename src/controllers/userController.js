@@ -4,7 +4,7 @@ const userService = require("../services/userService.js");
 // Controllers
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await userService.getAllUsers;
+    const users = await userService.getAllUsers();
     res.status(200).json({ users: users });
   } catch (err) {
     console.log(err);
@@ -16,7 +16,7 @@ const getUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.getUserById(id);
-    if (user === nil) {
+    if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({ user: user });
@@ -44,7 +44,7 @@ const updateUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.updateUserById(id, req);
-    if (user === nil) {
+    if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(201).json({ message: "User updated!" });
@@ -58,7 +58,7 @@ const deleteUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.deleteUserById(id);
-    if (user === nil) {
+    if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({ message: "User deleted!" });

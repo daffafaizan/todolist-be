@@ -10,7 +10,7 @@ const getAllUsers = () => {
 const getUserById = (id) => {
   const user = User.findByPk(id);
   if (!user) {
-    return nil;
+    return null;
   }
   return user;
 };
@@ -27,24 +27,29 @@ const createUser = (req) => {
   return user;
 };
 
-const updateUserById = (id, req) => {
+const updateUserById = async (id, req) => {
   const updatedName = req.body.name;
   const updatedUsername = req.body.username;
   const updatedPassword = req.body.password;
-  const user = User.findByPk(id);
-  if (!user) {
-    return nil;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return null;
+    }
+    user.name = updatedName;
+    user.username = updatedUsername;
+    user.password = updatedPassword;
+    await user.save();
+    return user;
+  } catch (err) {
+    throw err;
   }
-  user.name = updatedName;
-  user.username = updatedUsername;
-  user.password = updatedPassword;
-  return user.save();
 };
 
 const deleteUserById = (id) => {
   const user = User.findByPk(id);
   if (!user) {
-    return nil;
+    return null;
   }
   return User.destroy({
     where: {
