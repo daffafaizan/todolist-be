@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Server Setup
-app.use((_, res, next) => {
+app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   next();
@@ -40,7 +40,7 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // Error Handling
-app.use((error, _, res, _) => {
+app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
   const message = error.message || "Internal server error";

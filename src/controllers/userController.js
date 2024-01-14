@@ -2,7 +2,7 @@
 const userService = require("../services/userService.js");
 
 // Controllers
-const getAllUsers = async (_, res, _) => {
+const getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getAllUsers();
     res.status(200).json({ users: users });
@@ -12,7 +12,7 @@ const getAllUsers = async (_, res, _) => {
   }
 };
 
-const getUserById = async (req, res, _) => {
+const getUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.getUserById(id);
@@ -26,7 +26,7 @@ const getUserById = async (req, res, _) => {
   }
 };
 
-const createUser = async (req, res, _) => {
+const createUser = async (req, res, next) => {
   try {
     const user = await userService.createUser(req);
     console.log("User created!");
@@ -46,7 +46,7 @@ const createUser = async (req, res, _) => {
   }
 };
 
-const updateUserById = async (req, res, _) => {
+const updateUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.updateUserById(id, req);
@@ -63,7 +63,7 @@ const updateUserById = async (req, res, _) => {
   }
 };
 
-const deleteUserById = async (req, res, _) => {
+const deleteUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
     const user = await userService.deleteUserById(id);
