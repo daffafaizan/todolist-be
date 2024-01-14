@@ -1,6 +1,7 @@
 // 3rd Party Modules
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const sequelize = require("./utils/database.js");
 require("dotenv/config");
 
@@ -13,6 +14,12 @@ const PORT = env.PORT;
 app = express();
 
 // Middlewares
+app.use(
+  cors({
+    credentials: true,
+    origin: ["*"],
+  }),
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

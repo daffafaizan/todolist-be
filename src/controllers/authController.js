@@ -21,6 +21,27 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const token = await authService.login(req);
+    if (!token) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // One day
+    });
+    res.status(200).json({ message: "Success" });
+  } catch (err) {
+    if (err.message.includes("Invalid credentials")) {
+      res.status(400).json({ message: err.message });
+    }
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   register,
+  login,
 };
