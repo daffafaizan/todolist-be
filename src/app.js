@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Server Setup
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   next();
@@ -40,7 +40,7 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // Error Handling
-app.use((error, req, res, next) => {
+app.use((error, _, res, _) => {
   console.log(error);
   const status = error.statusCode || 500;
   const message = error.message || "Internal server error";
@@ -50,7 +50,7 @@ app.use((error, req, res, next) => {
 // Sync Database and Server Connection
 sequelize
   .sync()
-  .then((result) => {
+  .then(() => {
     console.log("Database connected!");
     app.listen(PORT, () => {
       console.log(`Server has started on port:${PORT}`);

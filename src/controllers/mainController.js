@@ -1,4 +1,4 @@
-const getMain = (req, res, next) => {
+const getMain = (_, res, _) => {
   res.send("Hello world!");
 };
 
