@@ -4,9 +4,10 @@ require("dotenv/config");
 
 // Local Modules
 const mainRoutes = require("./routes/mainRouter.js");
+const env = process.env;
 
 // Server Initialization
-const PORT = process.env.PORT;
+const PORT = env.PORT;
 app = express();
 
 // Middlewares
