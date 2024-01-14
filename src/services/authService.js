@@ -8,17 +8,22 @@ const User = require("../models/user.js");
 
 // Services
 const register = async (req) => {
-  const salt = bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10);
   const name = req.body.name;
   const username = req.body.username;
-  const hashedPassword = bcrypt.hash(req.body.password, salt);
+  const password = req.body.password;
   if (!name || !username || !password) {
     throw new Error("Name, username, and password are required fields!");
   }
-  const existingUsername = await User.findOne({ username: username });
+  const existingUsername = await User.findOne({
+    where: {
+      username: username,
+    },
+  });
   if (existingUsername) {
     throw new Error("Username already exists!");
   }
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
   const user = User.create({
     name: name,
     username: username,
@@ -28,7 +33,11 @@ const register = async (req) => {
 };
 
 const login = async (req) => {
-  const user = await User.findOne({ username: req.body.username });
+  const user = await User.findOne({
+    where: {
+      username: req.body.username,
+    },
+  });
   if (!user) {
     return null;
   }
