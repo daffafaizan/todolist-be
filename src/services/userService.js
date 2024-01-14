@@ -15,6 +15,9 @@ const createUser = (req) => {
   const name = req.body.name;
   const username = req.body.username;
   const password = req.body.password;
+  if (!name || !username || !password) {
+    throw new Error("Name, username, and password are required fields!");
+  }
   const user = User.create({
     name: name,
     username: username,
@@ -32,9 +35,9 @@ const updateUserById = async (id, req) => {
     if (!user) {
       return null;
     }
-    user.name = updatedName;
-    user.username = updatedUsername;
-    user.password = updatedPassword;
+    user.name = updatedName || user.name;
+    user.username = updatedUsername || user.username;
+    user.password = updatedPassword || user.password;
     await user.save();
     return user;
   } catch (err) {

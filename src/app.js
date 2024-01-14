@@ -26,11 +26,24 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/v1", mainRoutes);
 
+// Global Error Handler for synchronous errors
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+  // Handle the error gracefully or perform cleanup tasks
+  process.exit(1); // Terminate the process after handling the exception
+});
+
+// Global Error Handler for asynchronous errors (Promise rejections)
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  // Handle the rejection or log it
+});
+
 // Error Handling
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
-  const message = error.message;
+  const message = error.message || "Internal server error";
   res.status(status).json({ message: message });
 });
 

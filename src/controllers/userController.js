@@ -35,6 +35,9 @@ const createUser = async (req, res, next) => {
       user: user,
     });
   } catch (err) {
+    if (err.message.includes("required fields")) {
+      res.status(400).json({ message: err.message });
+    }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
