@@ -91,7 +91,6 @@ const refreshToken = async (req, res) => {
       httpOnly: true,
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
-    next();
   } catch (err) {
     throw new Error("Unauthorized. Invalid refresh token!");
   }
