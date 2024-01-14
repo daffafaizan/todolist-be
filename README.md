@@ -55,6 +55,5 @@ Special thanks to the following YouTube tutorials for providing valuable insight
 - [Node.js & Express.js REST API Authentication - Full Course](https://www.youtube.com/watch?v=sDPw2Yp4JwE&t=516s)
 - [Node.js Passport Login System Tutorial](https://www.youtube.com/watch?v=favjC6EKFgw&t=15s)
 
-Feel free to explore these tutorials for in-depth explanations and additional learning. This template is open for use and modification based on your requirements.
-
+Feel free to explore these tutorials for in-depth explanations and additional learning. This template is open for use and contributions are much appreciated!
 Happy coding!
