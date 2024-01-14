@@ -48,7 +48,7 @@ The template utilizes Sequelize as the ORM for database interactions.
 
 ## Credit
 
-This template was created by [Daffa Muhammad Faizan]. Special thanks to the following YouTube tutorials for providing valuable insights and guidance:
+Special thanks to the following YouTube tutorials for providing valuable insights and guidance:
 
 - [Express.js & PostgreSQL REST API - Full Course](https://www.youtube.com/watch?v=IxcKMcsBGE8&t=210s)
 - [Node.js Authentication with JWT - Full Course](https://www.youtube.com/watch?v=Uv-jMWV29rU&t=384s)
