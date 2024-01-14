@@ -5,7 +5,7 @@ const sequelize = require("./utils/database.js");
 require("dotenv/config");
 
 // Local Modules
-const mainRoutes = require("./routes/mainRouter.js");
+const routes = require("./routes/routes.js");
 const env = process.env;
 const PORT = env.PORT;
 
@@ -24,7 +24,7 @@ app.use((_, res, next) => {
 });
 
 // Routes
-app.use("/api/v1", mainRoutes);
+app.use("/api/v1", routes);
 
 // Global Error Handler for synchronous errors
 process.on("uncaughtException", (error) => {
