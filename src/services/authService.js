@@ -44,7 +44,7 @@ const login = async (req) => {
   if (!(await bcrypt.compare(req.body.password, user.password))) {
     throw new Error("Invalid credentials!");
   }
-  const token = jwt.sign({ id: user.id }, env.PRIVATE_KEY);
+  const token = jwt.sign({ id: user.id }, env.ACCESS_TOKEN_SECRET);
   return token;
 };
 

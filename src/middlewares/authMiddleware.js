@@ -12,7 +12,7 @@ const authenticateUser = (req, res, next) => {
       .json({ message: "Unauthorized. Token not provided" });
   }
   try {
-    const decodedToken = jwt.verify(token, env.PRIVATE_KEY);
+    const decodedToken = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
     req.userId = decodedToken.id;
     next();
   } catch (err) {
