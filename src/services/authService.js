@@ -65,6 +65,9 @@ const logout = async (res) => {
   res.cookie("accessToken", "", {
     maxAge: 0,
   });
+  res.cookie("refreshToken", "", {
+    maxAge: 0,
+  });
 };
 
 const refreshToken = async (req, res) => {
