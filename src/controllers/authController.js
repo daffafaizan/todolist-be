@@ -23,15 +23,11 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const token = await authService.login(req);
+    const token = await authService.login(req, res);
     if (!token) {
       return res.status(404).json({ message: "User not found!" });
     }
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // One day
-    });
-    res.status(200).json({ message: "Success" });
+    res.status(200).json({ message: "Successfully logged in!" });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
       res.status(400).json({ message: err.message });
@@ -41,7 +37,13 @@ const login = async (req, res, next) => {
   }
 };
 
+const logout = (req, res, next) => {
+  authService.logout(res);
+  res.status(200).json({ message: "Successfully logged out!" });
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };
