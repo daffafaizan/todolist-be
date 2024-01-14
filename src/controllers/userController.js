@@ -26,25 +26,6 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const createUser = async (req, res, next) => {
-  try {
-    const user = await userService.createUser(req);
-    res.status(201).json({
-      message: "User created!",
-      user: user,
-    });
-  } catch (err) {
-    if (err.message.includes("already exists")) {
-      res.status(400).json({ message: err.message });
-    }
-    if (err.message.includes("required fields")) {
-      res.status(400).json({ message: err.message });
-    }
-    console.log(err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
 const updateUserById = async (req, res, next) => {
   const id = req.params.id;
   try {
@@ -79,7 +60,6 @@ const deleteUserById = async (req, res, next) => {
 module.exports = {
   getAllUsers,
   getUserById,
-  createUser,
   updateUserById,
   deleteUserById,
 };

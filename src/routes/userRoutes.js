@@ -7,10 +7,7 @@ const userController = require("../controllers/userController.js");
 // User Routes
 const userRouter = Router();
 
-userRouter
-  .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+userRouter.route("/").get(userController.getAllUsers);
 
 userRouter
   .route("/:id")
