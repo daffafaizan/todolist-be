@@ -23,18 +23,10 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { accessToken, refreshToken } = await authService.login(req);
+    const { accessToken, refreshToken } = await authService.login(req, res);
     if (!accessToken || !refreshToken) {
       return res.status(404).json({ message: "User not found!" });
     }
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      maxAge: 15 * 60 * 1000, // 15 minutes
-    });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
     res.status(200).json({ message: "Successfully logged in!" });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
@@ -50,8 +42,18 @@ const logout = (req, res, next) => {
   res.status(200).json({ message: "Successfully logged out!" });
 };
 
+const refreshAccessToken = async (req, res, next) => {
+  try {
+    await authService.refreshToken(req, res);
+    res.status(200).json({ message: "Access token successfully refreshed!" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
+  refreshAccessToken,
 };
