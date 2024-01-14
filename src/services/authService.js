@@ -32,7 +32,7 @@ const register = async (req) => {
   return user;
 };
 
-const login = async (req, res) => {
+const login = async (req) => {
   const user = await User.findOne({
     where: {
       username: req.body.username,
@@ -44,12 +44,13 @@ const login = async (req, res) => {
   if (!(await bcrypt.compare(req.body.password, user.password))) {
     throw new Error("Invalid credentials!");
   }
-  const token = jwt.sign({ id: user.id }, env.ACCESS_TOKEN_SECRET);
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // One day
+  const accessToken = jwt.sign({ id: user.id }, env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "15m",
   });
-  return token;
+  const refreshToken = jwt.sign({ id: user.id }, env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
+  return { accessToken, refreshToken };
 };
 
 const logout = async (res) => {

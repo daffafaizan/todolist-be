@@ -23,10 +23,18 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const token = await authService.login(req, res);
-    if (!token) {
+    const { accessToken, refreshToken } = await authService.login(req);
+    if (!accessToken || !refreshToken) {
       return res.status(404).json({ message: "User not found!" });
     }
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
     res.status(200).json({ message: "Successfully logged in!" });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
