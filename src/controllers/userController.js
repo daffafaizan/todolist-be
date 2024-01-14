@@ -35,6 +35,9 @@ const createUser = async (req, res, next) => {
       user: user,
     });
   } catch (err) {
+    if (err.message.includes("already exists")) {
+      res.status(400).json({ message: err.message });
+    }
     if (err.message.includes("required fields")) {
       res.status(400).json({ message: err.message });
     }
@@ -52,6 +55,9 @@ const updateUserById = async (req, res, next) => {
     }
     res.status(201).json({ message: "User updated!" });
   } catch (err) {
+    if (err.message.includes("already exists")) {
+      res.status(400).json({ message: err.message });
+    }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }

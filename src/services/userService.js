@@ -6,17 +6,25 @@ const getAllUsers = () => {
   return User.findAll();
 };
 
-const getUserById = (id) => {
-  const user = User.findByPk(id);
+const getUserById = async (id) => {
+  const user = await User.findByPk(id);
   return user || null;
 };
 
-const createUser = (req) => {
+const createUser = async (req) => {
   const name = req.body.name;
   const username = req.body.username;
   const password = req.body.password;
   if (!name || !username || !password) {
     throw new Error("Name, username, and password are required fields!");
+  }
+  const existingUsername = await User.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (existingUsername) {
+    throw new Error("Username already exists!");
   }
   const user = User.create({
     name: name,
@@ -34,6 +42,14 @@ const updateUserById = async (id, req) => {
     const user = await User.findByPk(id);
     if (!user) {
       return null;
+    }
+    const existingUsername = await User.findOne({
+      where: {
+        username: updatedUsername,
+      },
+    });
+    if (existingUsername && existingUsername.id != id) {
+      throw new Error("Username already exists!");
     }
     user.name = updatedName || user.name;
     user.username = updatedUsername || user.username;
