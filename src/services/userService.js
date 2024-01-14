@@ -3,16 +3,12 @@ const User = require("../models/user.js");
 
 // Services
 const getAllUsers = () => {
-  const users = User.findAll();
-  return users;
+  return User.findAll();
 };
 
 const getUserById = (id) => {
   const user = User.findByPk(id);
-  if (!user) {
-    return null;
-  }
-  return user;
+  return user || null;
 };
 
 const createUser = (req) => {
@@ -46,16 +42,17 @@ const updateUserById = async (id, req) => {
   }
 };
 
-const deleteUserById = (id) => {
+const deleteUserById = async (id) => {
   const user = User.findByPk(id);
   if (!user) {
     return null;
   }
-  return User.destroy({
+  await User.destroy({
     where: {
       id: id,
     },
   });
+  return user;
 };
 
 module.exports = {
