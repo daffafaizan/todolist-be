@@ -13,7 +13,7 @@ const getAllUsers = async (req, res, next) => {
 };
 
 const getUserById = async (req, res, next) => {
-  const id = req.params.userId;
+  const id = req.params.id;
   try {
     const user = await userService.getUserById(id);
     if (user === nil) {
@@ -41,7 +41,7 @@ const createUser = async (req, res, next) => {
 };
 
 const updateUserById = async (req, res, next) => {
-  const id = req.params.userId;
+  const id = req.params.id;
   try {
     const user = await userService.updateUserById(id, req);
     if (user === nil) {
@@ -55,7 +55,7 @@ const updateUserById = async (req, res, next) => {
 };
 
 const deleteUserById = async (req, res, next) => {
-  const id = req.params.userId;
+  const id = req.params.id;
   try {
     const user = await userService.deleteUserById(id);
     if (user === nil) {
