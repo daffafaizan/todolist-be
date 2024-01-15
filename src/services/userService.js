@@ -2,13 +2,19 @@
 const User = require("../models/user.js");
 
 // Services
-const getAllUsers = () => {
-  return User.findAll();
+const getAllUsers = async () => {
+  const users = await User.findAll();
+  const usersWithoutPassword = users.map((user) => {
+    const { password, ...data } = user.toJSON();
+    return data;
+  });
+  return usersWithoutPassword;
 };
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id);
-  return user || null;
+  const { password, ...data } = user.toJSON();
+  return data || null;
 };
 
 const updateUserById = async (id, req) => {
@@ -32,7 +38,8 @@ const updateUserById = async (id, req) => {
     user.username = updatedUsername || user.username;
     user.password = updatedPassword || user.password;
     await user.save();
-    return user;
+    const { password, ...data } = user.toJSON();
+    return data;
   } catch (err) {
     throw err;
   }

@@ -24,12 +24,14 @@ const register = async (req) => {
     throw new Error("Username already exists!");
   }
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
-  const user = User.create({
+  const user = User.build({
     name: name,
     username: username,
     password: hashedPassword,
   });
-  return user;
+  await user.save();
+  const { password: userPassword, ...data } = user.toJSON();
+  return data;
 };
 
 const login = async (req, res) => {
