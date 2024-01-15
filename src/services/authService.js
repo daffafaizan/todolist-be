@@ -28,6 +28,8 @@ const register = async (req) => {
     name: name,
     username: username,
     password: hashedPassword,
+    accessToken: "",
+    refreshToken: "",
   });
   await user.save();
   const { password: userPassword, ...data } = user.toJSON();
@@ -60,10 +62,24 @@ const login = async (req, res) => {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
+  user.accessToken = accessToken;
+  user.refreshToken = refreshToken;
+  await user.save();
   return { accessToken, refreshToken };
 };
 
-const logout = async (res) => {
+const logout = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      refreshToken: req.cookies["refreshToken"],
+    },
+  });
+  if (!user) {
+    throw new Error("User not found!");
+  }
+  user.accessToken = "";
+  user.refreshToken = "";
+  await user.save();
   res.cookie("accessToken", "", {
     maxAge: 0,
   });
@@ -89,6 +105,16 @@ const refreshToken = async (req, res) => {
         expiresIn: "15m",
       },
     );
+    const user = await User.findOne({
+      where: {
+        refreshToken: req.cookies["refreshToken"],
+      },
+    });
+    if (!user) {
+      throw new Error("User not found!");
+    }
+    user.accessToken = newAccessToken;
+    await user.save();
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       maxAge: 15 * 60 * 1000, // 15 minutes

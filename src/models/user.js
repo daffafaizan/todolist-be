@@ -26,6 +26,12 @@ const User = db.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  accessToken: {
+    type: Sequelize.STRING,
+  },
+  refreshToken: {
+    type: Sequelize.STRING,
+  },
 });
 
 module.exports = User;

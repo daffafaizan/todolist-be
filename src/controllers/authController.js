@@ -27,7 +27,10 @@ const login = async (req, res, next) => {
     if (!accessToken || !refreshToken) {
       return res.status(404).json({ message: "User not found!" });
     }
-    res.status(200).json({ message: "Successfully logged in!" });
+    res.status(200).json({
+      message: "Successfully logged in!",
+      data: { accessToken, refreshToken },
+    });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
       res.status(400).json({ error: err.message });
@@ -41,7 +44,7 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
-  authService.logout(res);
+  authService.logout(req, res);
   res.status(200).json({ message: "Successfully logged out!" });
 };
 
