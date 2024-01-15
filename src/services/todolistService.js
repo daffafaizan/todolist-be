@@ -1,4 +1,5 @@
 // Local Modules
+const env = process.env;
 const Todolist = require("../models/todolist.js");
 
 // Services
@@ -12,20 +13,27 @@ const getTodolistById = async (id) => {
 };
 
 const createTodolist = (req) => {
-  const title = req.body.title;
-  const content = req.body.content;
-  const priority = req.body.priority;
-  const completed = req.body.completed;
-  if (!title) {
-    throw new Error("Title is a required field!");
-  }
-  const todolist = Todolist.create({
-    title: title,
-    content: content,
-    priority: priority,
-    completed: completed,
-  });
-  return todolist;
+  try {
+    const title = req.body.title;
+    const content = req.body.content;
+    const priority = req.body.priority;
+    const completed = req.body.completed;
+    if (!title) {
+      throw new Error("Title is a required field!");
+    }
+    const accessToken = req.cookies["accessToken"];
+    const decodedAccessToken = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET); // replace 'your-secret-key' with your actual secret key
+    const userId = decodedAccessToken.id;
+    const todolist = Todolist.create({
+      title: title,
+      content: content,
+      priority: priority,
+      completed: completed,
+      userId: userId,
+    });
+    return todolist;
+  } catch (err) {}
+  throw new Error("Unauthorized. Access token not provided");
 };
 
 const updateTodolistById = async (id, req) => {

@@ -3,9 +3,10 @@ const Sequelize = require("sequelize");
 
 // Local Modules
 const db = require("../utils/database.js");
+const User = require("./user.js");
 
 // Model Initialization
-const todolist = db.define("todolist", {
+const Todolist = db.define("todolist", {
   id: {
     type: Sequelize.BIGINT,
     autoIncrement: true,
@@ -29,4 +30,6 @@ const todolist = db.define("todolist", {
   },
 });
 
-module.exports = todolist;
+Todolist.belongsTo(User);
+
+module.exports = Todolist;
