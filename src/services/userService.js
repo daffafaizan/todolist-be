@@ -39,7 +39,7 @@ const updateUserById = async (id, req) => {
 };
 
 const deleteUserById = async (id) => {
-  const user = User.findByPk(id);
+  const user = await User.findByPk(id);
   if (!user) {
     return null;
   }
