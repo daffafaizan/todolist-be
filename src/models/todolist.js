@@ -3,7 +3,6 @@ const Sequelize = require("sequelize");
 
 // Local Modules
 const db = require("../utils/database.js");
-const User = require("./user.js");
 
 // Model Initialization
 const Todolist = db.define("todolist", {
@@ -29,7 +28,5 @@ const Todolist = db.define("todolist", {
     allowNull: false,
   },
 });
-
-Todolist.belongsTo(User);
 
 module.exports = Todolist;

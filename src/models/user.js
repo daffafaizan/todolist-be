@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 
 // Local Modules
 const db = require("../utils/database.js");
-const todolist = require("./todolist.js");
+const Todolist = require("./todolist.js");
 
 // Model Initialization
 const User = db.define("user", {
@@ -35,6 +35,7 @@ const User = db.define("user", {
   },
 });
 
-User.hasMany(todolist);
+User.hasMany(Todolist);
+Todolist.belongsTo(User);
 
 module.exports = User;

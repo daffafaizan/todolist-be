@@ -3,8 +3,9 @@ const todolistService = require("../services/todolistService.js");
 
 // Controllers
 const getAllTodolists = async (req, res, next) => {
+  const userId = req.userId;
   try {
-    const todolists = await todolistService.getAllTodolists();
+    const todolists = await todolistService.getAllTodolists(userId);
     res.status(200).json({ todolists: todolists });
   } catch (err) {
     console.log(err);
@@ -12,9 +13,10 @@ const getAllTodolists = async (req, res, next) => {
   }
 };
 const getTodolistById = async (req, res, next) => {
-  const id = req.params.id;
+  const todolistId = req.params.id;
+  const userId = req.userId;
   try {
-    const todolist = await todolistService.getTodolistById(id);
+    const todolist = await todolistService.getTodolistById(userId, todolistId);
     if (!todolist) {
       return res.status(404).json({ message: "Todolist not found!" });
     }
@@ -43,9 +45,14 @@ const createTodolist = async (req, res, next) => {
   }
 };
 const updateTodolistById = async (req, res, next) => {
-  const id = req.params.id;
+  const todolistId = req.params.id;
+  const userId = req.userId;
   try {
-    const todolist = await todolistService.updateTodolistById(id, req);
+    const todolist = await todolistService.updateTodolistById(
+      userId,
+      todolistId,
+      req,
+    );
     if (!todolist) {
       return res.status(404).json({ message: "Todolist not found!" });
     }
@@ -56,9 +63,13 @@ const updateTodolistById = async (req, res, next) => {
   }
 };
 const deleteTodolistById = async (req, res, next) => {
-  const id = req.params.id;
+  const todolistId = req.params.id;
+  const userId = req.userId;
   try {
-    const todolist = await todolistService.deleteTodolistById(id);
+    const todolist = await todolistService.deleteTodolistById(
+      userId,
+      todolistId,
+    );
     if (!todolist) {
       return res.status(404).json({ message: "Todolist not found!" });
     }

@@ -3,12 +3,21 @@ const env = process.env;
 const Todolist = require("../models/todolist.js");
 
 // Services
-const getAllTodolists = () => {
-  return Todolist.findAll();
+const getAllTodolists = async (userId) => {
+  return Todolist.findAll({
+    where: {
+      userId: userId,
+    },
+  });
 };
 
-const getTodolistById = async (id) => {
-  const todolist = await Todolist.findByPk(id);
+const getTodolistById = async (userId, todolistId) => {
+  const todolist = await Todolist.findOne({
+    where: {
+      id: todolistId,
+      userId: userId,
+    },
+  });
   return todolist || null;
 };
 
@@ -21,9 +30,7 @@ const createTodolist = (req) => {
     if (!title) {
       throw new Error("Title is a required field!");
     }
-    const accessToken = req.cookies["accessToken"];
-    const decodedAccessToken = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET); // replace 'your-secret-key' with your actual secret key
-    const userId = decodedAccessToken.id;
+    const userId = req.userId;
     const todolist = Todolist.create({
       title: title,
       content: content,
@@ -36,13 +43,18 @@ const createTodolist = (req) => {
   throw new Error("Unauthorized. Access token not provided");
 };
 
-const updateTodolistById = async (id, req) => {
+const updateTodolistById = async (userId, todolistId, req) => {
   const updatedTitle = req.body.title;
   const updatedContent = req.body.content;
   const updatedPriority = req.body.priority;
   const updatedCompleted = req.body.completed;
   try {
-    const todolist = await Todolist.findByPk(id);
+    const todolist = await Todolist.findOne({
+      where: {
+        id: todolistId,
+        userId: userId,
+      },
+    });
     if (!todolist) {
       return null;
     }
@@ -57,14 +69,20 @@ const updateTodolistById = async (id, req) => {
   }
 };
 
-const deleteTodolistById = async (id) => {
-  const todolist = await Todolist.findByPk(id);
+const deleteTodolistById = async (userId, todolistId) => {
+  const todolist = await Todolist.findOne({
+    where: {
+      id: todolistId,
+      userId: userId,
+    },
+  });
   if (!todolist) {
     return null;
   }
   await Todolist.destroy({
     where: {
-      id: id,
+      id: todolistId,
+      userId: userId,
     },
   });
   return todolist;
