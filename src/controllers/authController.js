@@ -43,9 +43,17 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = (req, res, next) => {
-  authService.logout(req, res);
-  res.status(200).json({ message: "Successfully logged out!" });
+const logout = async (req, res, next) => {
+  try {
+    await authService.logout(req, res);
+    res.status(200).json({ message: "Successfully logged out!" });
+  } catch (err) {
+    if (err.message.includes("User not found")) {
+      res.status(404).json({ error: err.message });
+    }
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 const refreshAccessToken = async (req, res, next) => {
