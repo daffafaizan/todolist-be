@@ -69,23 +69,32 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const user = await User.findOne({
-    where: {
-      refreshToken: req.cookies["refreshToken"],
-    },
-  });
-  if (!user) {
-    throw new Error("User not found!");
+  const refreshToken = req.cookies["refreshToken"];
+  if (!refreshToken) {
+    throw new Error("Refresh token not provided!");
   }
-  user.accessToken = "";
-  user.refreshToken = "";
-  await user.save();
-  res.cookie("accessToken", "", {
-    maxAge: 0,
-  });
-  res.cookie("refreshToken", "", {
-    maxAge: 0,
-  });
+  try {
+    const decodedRefreshToken = jwt.verify(
+      refreshToken,
+      env.REFRESH_TOKEN_SECRET,
+    );
+    const user = await User.findByPk(decodedRefreshToken.id);
+    if (!user) {
+      throw new Error("User not found!");
+    }
+
+    user.accessToken = "";
+    user.refreshToken = "";
+    await user.save();
+    res.cookie("accessToken", "", {
+      maxAge: 0,
+    });
+    res.cookie("refreshToken", "", {
+      maxAge: 0,
+    });
+  } catch (err) {
+    throw new Error("Invalid refresh token!");
+  }
 };
 
 const refreshToken = async (req, res) => {

@@ -51,6 +51,12 @@ const logout = async (req, res, next) => {
     if (err.message.includes("User not found")) {
       res.status(404).json({ error: err.message });
     }
+    if (err.message.includes("not provided")) {
+      res.status(404).json({ error: err.message });
+    }
+    if (err.message.includes("Invalid refresh token")) {
+      res.status(400).json({ error: err.message });
+    }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }

@@ -45,11 +45,20 @@ const updateUserById = async (id, req) => {
   }
 };
 
-const deleteUserById = async (id) => {
+const deleteUserById = async (id, res) => {
   const user = await User.findByPk(id);
   if (!user) {
     return null;
   }
+  user.accessToken = "";
+  user.refreshToken = "";
+  await user.save();
+  res.cookie("accessToken", "", {
+    maxAge: 0,
+  });
+  res.cookie("refreshToken", "", {
+    maxAge: 0,
+  });
   await User.destroy({
     where: {
       id: id,
