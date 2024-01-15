@@ -36,7 +36,7 @@ const updateUserById = async (req, res, next) => {
     res.status(201).json({ message: "User updated!" });
   } catch (err) {
     if (err.message.includes("already exists")) {
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ error: err.message });
     }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });

@@ -11,10 +11,10 @@ const register = async (req, res, next) => {
     });
   } catch (err) {
     if (err.message.includes("already exists")) {
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ error: err.message });
     }
     if (err.message.includes("required fields")) {
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ error: err.message });
     }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
@@ -30,7 +30,10 @@ const login = async (req, res, next) => {
     res.status(200).json({ message: "Successfully logged in!" });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ error: err.message });
+    }
+    if (err.message.includes("User not found")) {
+      res.status(404).json({ error: err.message });
     }
     console.log(err);
     res.status(500).json({ error: "Internal server error" });

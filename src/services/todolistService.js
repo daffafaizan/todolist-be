@@ -1,5 +1,5 @@
 // Local Modules
-const Todolist = require("../models/user.js");
+const Todolist = require("../models/todolist.js");
 
 // Services
 const getAllTodolists = () => {
@@ -34,7 +34,7 @@ const updateTodolistById = async (id, req) => {
   const updatedPriority = req.body.priority;
   const updatedCompleted = req.body.completed;
   try {
-    const todolist = await findByPk(id);
+    const todolist = await Todolist.findByPk(id);
     if (!todolist) {
       return null;
     }

@@ -39,7 +39,7 @@ const login = async (req, res) => {
     },
   });
   if (!user) {
-    return null;
+    throw new Error("User not found!");
   }
   if (!(await bcrypt.compare(req.body.password, user.password))) {
     throw new Error("Invalid credentials!");

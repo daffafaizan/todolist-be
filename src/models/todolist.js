@@ -29,6 +29,4 @@ const todolist = db.define("todolist", {
   },
 });
 
-module.exports = {
-  todolist,
-};
+module.exports = todolist;

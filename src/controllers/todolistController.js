@@ -24,9 +24,9 @@ const getTodolistById = async (req, res, next) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-const createTodolist = (req, res, next) => {
+const createTodolist = async (req, res, next) => {
   try {
-    const todolist = todolistService.createTodolist(req);
+    const todolist = await todolistService.createTodolist(req);
     res.status(201).json({
       message: "Todolist created!",
       todolist: todolist,
