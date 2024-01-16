@@ -14,18 +14,15 @@ const Todolist = db.define("todolist", {
   },
   title: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   content: {
     type: Sequelize.TEXT("long"),
   },
   priority: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   completed: {
     type: Sequelize.BOOLEAN,
-    allowNull: false,
   },
 });
 

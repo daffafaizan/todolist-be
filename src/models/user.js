@@ -26,6 +26,7 @@ const User = db.define("user", {
   password: {
     type: Sequelize.STRING,
     allowNull: false,
+    len: [7, 30],
   },
   accessToken: {
     type: Sequelize.STRING,

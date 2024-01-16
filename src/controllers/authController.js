@@ -11,7 +11,7 @@ const register = async (req, res, next) => {
     });
   } catch (err) {
     if (err.message.includes("already exists")) {
-      res.status(400).json({ error: err.message });
+      res.status(403).json({ error: err.message });
     }
     if (err.message.includes("required fields")) {
       res.status(400).json({ error: err.message });
@@ -65,12 +65,10 @@ const logout = async (req, res, next) => {
 const refreshAccessToken = async (req, res, next) => {
   try {
     const accessToken = await authService.refreshToken(req, res);
-    res
-      .status(200)
-      .json({
-        message: "Access token successfully refreshed!",
-        accessToken: accessToken,
-      });
+    res.status(200).json({
+      message: "Access token successfully refreshed!",
+      accessToken: accessToken,
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
