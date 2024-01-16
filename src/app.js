@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000"],
+    origin: ["http://todolist.daffafaizan.com"],
   }),
 );
 app.use(bodyParser.json());
@@ -27,7 +27,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Server Setup
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "http://todolist.daffafaizan.com",
+  );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
