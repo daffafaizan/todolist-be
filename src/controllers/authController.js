@@ -23,13 +23,13 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { accessToken, refreshToken } = await authService.login(req, res);
-    if (!accessToken || !refreshToken) {
+    const { id, accessToken, refreshToken } = await authService.login(req, res);
+    if (!id || !accessToken || !refreshToken) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({
       message: "Successfully logged in!",
-      data: { accessToken, refreshToken },
+      data: { id, accessToken, refreshToken },
     });
   } catch (err) {
     if (err.message.includes("Invalid credentials")) {
@@ -64,8 +64,13 @@ const logout = async (req, res, next) => {
 
 const refreshAccessToken = async (req, res, next) => {
   try {
-    await authService.refreshToken(req, res);
-    res.status(200).json({ message: "Access token successfully refreshed!" });
+    const accessToken = await authService.refreshToken(req, res);
+    res
+      .status(200)
+      .json({
+        message: "Access token successfully refreshed!",
+        accessToken: accessToken,
+      });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

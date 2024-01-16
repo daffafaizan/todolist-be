@@ -48,10 +48,11 @@ const login = async (req, res) => {
   if (!(await bcrypt.compare(req.body.password, user.password))) {
     throw new Error("Invalid credentials!");
   }
-  const accessToken = jwt.sign({ id: user.id }, env.ACCESS_TOKEN_SECRET, {
+  const id = user.id;
+  const accessToken = jwt.sign({ id: id }, env.ACCESS_TOKEN_SECRET, {
     expiresIn: "15m",
   });
-  const refreshToken = jwt.sign({ id: user.id }, env.REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign({ id: id }, env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
   res.cookie("accessToken", accessToken, {
@@ -65,7 +66,7 @@ const login = async (req, res) => {
   user.accessToken = accessToken;
   user.refreshToken = refreshToken;
   await user.save();
-  return { accessToken, refreshToken };
+  return { id, accessToken, refreshToken };
 };
 
 const logout = async (req, res) => {
@@ -98,7 +99,9 @@ const logout = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  const refreshToken = req.cookies["refreshToken"];
+  const refreshToken =
+    req.cookies["refreshToken"] ||
+    (req.headers.authorization && req.headers.authorization.split(" ")[1]);
   if (!refreshToken) {
     throw new Error("Unauthorized. Refresh token not provided!");
   }
@@ -128,6 +131,7 @@ const refreshToken = async (req, res) => {
       httpOnly: true,
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
+    return newAccessToken;
   } catch (err) {
     throw new Error("Unauthorized. Invalid refresh token!");
   }
