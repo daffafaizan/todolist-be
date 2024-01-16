@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: ["*"],
+    origin: ["https://todolist.daffafaizan.com"],
   }),
 );
 app.use(bodyParser.json());
@@ -27,8 +27,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Server Setup
 app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://todolist.daffafaizan.com",
+  );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   res.header("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
